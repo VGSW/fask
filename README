@@ -1,0 +1,2 @@
+# set BASE to where VGSW/ondewo is checked out
+BASE=ondewo make build test run
