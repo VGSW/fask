@@ -17,6 +17,7 @@ CONTAINER=ondewo01
 # 	${TAR} xzvf data/mail.tar.gz
 
 build:
+	$(warning "make sure needed config files are available")
 	${DOCKER} build --tag ${IMAGE} --file Dockerfile src/
 
 run:
