@@ -6,13 +6,15 @@ class Fask:
         """ kwa.debug ... print some debug output
         """
 
-        self.debug = kwa.get ('debug')
+        cfg = kwa.get ('cfg')
+
+        self.debug = cfg.get ('debug')
         self.reset()
 
         self.cluster = LocalCluster (
-            n_workers           = 4,
+            n_workers           = cfg.get ('processes'),
             processes           = True,
-            threads_per_worker  = 4,
+            threads_per_worker  = cfg.get ('threads'),
 
             # make bokeh available outside of a docker container too
             # see: https://github.com/dask/distributed/issues/1875

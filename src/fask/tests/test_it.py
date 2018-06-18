@@ -9,8 +9,10 @@ def simple_sqrt (x):
 
 class Jimmy (Fask):
     def __init__ (self, **kwa):
-        self.times = kwa.get ('times')
-        super().__init__ (debug = kwa.get ('debug'))
+        cfg = kwa.get ('cfg')
+
+        self.times = cfg.get ('times')
+        super().__init__ (cfg = kwa.get ('cfg'))
 
 
     def calculations (self):
@@ -20,10 +22,12 @@ class Jimmy (Fask):
 def test_fask():
     times = 10
 
-    tf = Jimmy (
-        debug = False,
-        times = times,
-    )
+    tf = Jimmy (cfg = dict (
+        times     = times,
+        processes = 2,
+        threads   = 2,
+        debug     = False,
+    ))
 
     assert tf.count_calculations == 10
     assert tf.count_results == 10

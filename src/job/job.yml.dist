@@ -1,0 +1,12 @@
+---
+
+# submit the calculation this many times
+times:
+
+## the following are passed throug to dask
+
+# number of processes
+processes:
+
+# number of threads
+threads:
