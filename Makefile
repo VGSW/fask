@@ -1,7 +1,7 @@
 # expected from environment
-ifeq (${BASE},)
-  $(error environment variable BASE is not set)
-endif
+# ifeq (${BASE},)
+#   $(error environment variable BASE is not set)
+# endif
 
 DOCKER=/usr/bin/docker
 PYTEST=/usr/bin/pytest
