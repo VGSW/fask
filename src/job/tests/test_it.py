@@ -9,7 +9,7 @@ def test_smoke():
         times     = times,
         processes = 2,
         threads   = 2,
-        debug     = False,
+        loglevel  = 'error',
     ))
 
     assert job.count_calculations == times
