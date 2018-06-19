@@ -19,7 +19,7 @@ class Fask:
 
         self.reset()
 
-        handler = logging.FileHandler ('%s/fask.log' % os.path.dirname (os.path.realpath (__file__)))
+        handler = logging.FileHandler ('%s/../log/fask.log' % os.path.dirname (os.path.realpath (__file__)))
         handler.setFormatter (logging.Formatter (fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
         self.logger = logging.getLogger ('fask')
         self.logger.addHandler (handler)

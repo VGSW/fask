@@ -19,6 +19,7 @@ RUN pip3 install \
     dask[distributed] \
     bokeh
 
+RUN mkdir /root/log/
 RUN mkdir /root/fask/
 COPY fask/ /root/fask/
 RUN mkdir /root/job/
