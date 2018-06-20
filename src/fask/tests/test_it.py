@@ -29,8 +29,8 @@ def test_fask():
         loglevel  = 'error',
     ))
 
-    assert tf.count_calculations == 10
-    assert tf.count_results == 10
+    assert tf.calculations_submitted == 10
+    assert tf.results_collected == 10
     assert (
         sorted ([ r.get ('result') for r in tf.results ])
         ==

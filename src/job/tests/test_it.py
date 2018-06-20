@@ -9,11 +9,33 @@ def test_smoke():
         times     = times,
         processes = 2,
         threads   = 2,
-        loglevel  = 'error',
+        loglevel  = 'info',
+        timeout   = None,
     ))
 
-    assert job.count_calculations == times
-    assert job.count_results == times
+    assert job.calculations_submitted == times
+    assert job.results_collected == times
+
+
+def test_sigalrm():
+    times = 10_000
+
+    job = Job (cfg = dict (
+        times     = times,
+        processes = 1,
+        threads   = 1,
+        loglevel  = 'info',
+        timeout   = 1,
+    ))
+
+    assert job.calculations_submitted < times
+    assert job.results_collected < times
+    assert job.results_collected < job.calculations_submitted
+
+
+# TODO
+def test_sigalrm():
+    pass
 
 
 if __name__ == '__main__':

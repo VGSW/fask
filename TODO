@@ -2,10 +2,9 @@ Task 1: Multiprocessing
 
 [x] Create mini-framework around Dask
 [x] Number of threads/processes configurable
-[ ] Use Dask.Bag
-[ ] Use DataFrame
 [x] Run tasks
-[ ] Signal to stop
-[ ] Stop after set timeout
+[x] Signal to stop
+[x] Stop after set timeout (seconds)
+[ ] Stop after set timeout (milliseconds)
 [ ] Stop by initially set condition
 [ ] E ?
