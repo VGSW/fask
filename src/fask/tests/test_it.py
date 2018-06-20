@@ -1,3 +1,4 @@
+import pytest
 import math
 
 from fask.main import Fask
@@ -36,3 +37,23 @@ def test_fask():
         ==
         sorted ([ simple_sqrt (x)() for x in range (times) ])
     )
+
+
+class Hendrix (Fask):
+    def __init__ (self, **kwa):
+        cfg = kwa.get ('cfg')
+
+        self.times = cfg.get ('times')
+        super().__init__ (cfg = kwa.get ('cfg'))
+
+
+def test_fask_hendrix():
+    times = 10
+
+    with pytest.raises (NotImplementedError):
+        tf = Hendrix (cfg = dict (
+            times     = times,
+            processes = 2,
+            threads   = 2,
+            loglevel  = 'error',
+        ))

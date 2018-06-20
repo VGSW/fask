@@ -177,7 +177,7 @@ class Fask:
             OUT: a list of functions to run
         """
 
-        raise (NotImplementedError, 'virtual method run() not implemented')
+        raise NotImplementedError ('virtual method run() not implemented')
 
 
 if __name__ == '__main__':
