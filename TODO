@@ -8,3 +8,7 @@ Task 1: Multiprocessing
 [ ] Stop after set timeout (milliseconds)
 [ ] Stop by initially set condition
 [ ] E ?
+
+Task 0: List of cracy ideas
+
+[/] cache (function, params) tuples and results in Fask

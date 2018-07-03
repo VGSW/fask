@@ -5,6 +5,8 @@ import signal
 
 from dask.distributed import Client, LocalCluster, as_completed
 
+from fask.types import Calculation
+from fask.cache import Cache
 
 class Fask:
     def __init__ (self, **kwa):
@@ -20,13 +22,13 @@ class Fask:
             logging.INFO,
         )
 
-        self.reset()
-
         handler = logging.FileHandler ('%s/../log/fask.log' % os.path.dirname (os.path.realpath (__file__)))
         handler.setFormatter (logging.Formatter (fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
         self.logger = logging.getLogger ('fask')
         self.logger.addHandler (handler)
         self.logger.setLevel (loglevel)
+
+        self.reset()
 
         self.cluster = LocalCluster (
             n_workers           = cfg.get ('processes'),
@@ -117,6 +119,7 @@ class Fask:
         self.results_collected      = 0
         self.results            = []
         self.futures            = []
+        self.cache              = Cache (logger = self.logger)
 
 
     ###
@@ -131,11 +134,33 @@ class Fask:
             raise (LookupError, 'no calculations available')
 
         for ci, c in enumerate (self.calculations()):
-            future = self.client.submit (c, pure = False)
+            # XXX must support old-style lambdas too
 
-            self.logger.debug ('[{ci}] future {key} submitted'.format (ci = ci, key = future.key))
-            self.futures.append (future)
-            self.calculations_submitted += 1
+            if isinstance (c, Calculation):
+                fn     = c.fn
+                params = c.params
+
+                if self.cache.has (fn = fn, params = params):
+                    self.logger.error ('[{ci}] known calculation'. format (ci = ci))
+                    # TODO link to known calculation
+                else:
+                    self.logger.error ('[{ci}] new calculation'. format (ci = ci))
+                    self.cache.add (fn = fn, params = params)
+
+                self.logger.error ('[{ci}] fn: {fn}, params: {params}'.format (ci = ci, fn = fn, params = params))
+                future = self.client.submit (fn, params, pure = True)
+
+                self.logger.debug ('[{ci}] future {key} submitted'.format (ci = ci, key = future.key))
+                self.futures.append (future)
+                self.calculations_submitted += 1
+
+            else:
+                # XXX old-style lambdas
+                future = self.client.submit (c, pure = False)
+
+                self.logger.debug ('[{ci}] future {key} submitted'.format (ci = ci, key = future.key))
+                self.futures.append (future)
+                self.calculations_submitted += 1
 
         self.log_status('run')
         self.collect_results (all = True)
