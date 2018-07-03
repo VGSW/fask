@@ -33,10 +33,5 @@ def test_sigalrm():
     assert job.results_collected < job.calculations_submitted
 
 
-# TODO
-def test_sigalrm():
-    pass
-
-
 if __name__ == '__main__':
     test_smoke()
