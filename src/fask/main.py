@@ -131,11 +131,22 @@ class Fask:
             raise (LookupError, 'no calculations available')
 
         for ci, c in enumerate (self.calculations()):
-            future = self.client.submit (c, pure = False)
 
-            self.logger.debug ('[{ci}] future {key} submitted'.format (ci = ci, key = future.key))
-            self.futures.append (future)
-            self.calculations_submitted += 1
+            if self.stop_condition():
+                self.logger.info ('stop_condition() triggerd rabbit\'s ALL_STOP command')
+                self.log_status('run|stopped')
+
+                self.collect_results (all = True)
+                self.cleanup()
+                self.bailout()
+                break
+
+            else:
+                future = self.client.submit (c, pure = False)
+
+                self.logger.debug ('[{ci}] future {key} submitted'.format (ci = ci, key = future.key))
+                self.futures.append (future)
+                self.calculations_submitted += 1
 
         self.log_status('run')
         self.collect_results (all = True)
@@ -178,6 +189,10 @@ class Fask:
         """
 
         raise NotImplementedError ('virtual method run() not implemented')
+
+    def stop_condition (self):
+        self.logger.warn ('virtual stop_condition() called')
+        return False
 
 
 if __name__ == '__main__':

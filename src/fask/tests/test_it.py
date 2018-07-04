@@ -1,5 +1,8 @@
 import pytest
 import math
+import time
+import random
+
 
 from fask.main import Fask
 
@@ -27,7 +30,7 @@ def test_fask():
         times     = times,
         processes = 2,
         threads   = 2,
-        loglevel  = 'error',
+        loglevel  = 'debug',
     ))
 
     assert tf.calculations_submitted == 10
@@ -57,3 +60,33 @@ def test_fask_hendrix():
             threads   = 2,
             loglevel  = 'error',
         ))
+
+class Sid (Fask):
+    def __init__ (self, **kwa):
+        cfg = kwa.get ('cfg')
+
+        self.times = cfg.get ('times')
+        super().__init__ (cfg = kwa.get ('cfg'))
+
+
+    def calculations (self):
+        return [simple_sqrt (x) for x in range (self.times)]
+
+    def stop_condition (self):
+        return random.randint (1, 10) % 2 == 0 and True or False
+
+
+def test_fask_sid():
+    # XXX this test will in most cases succeed, but it might not
+    # more deterministic stop_condition will fix this
+    times = 1000
+
+    tf = Sid (cfg = dict (
+        times     = times,
+        processes = 2,
+        threads   = 2,
+        loglevel  = 'error',
+    ))
+
+    assert tf.calculations_submitted < times
+    assert tf.results_collected < times
